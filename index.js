@@ -2,7 +2,7 @@
 const { Client, LocalAuth, Buttons } = require('whatsapp-web.js');
 const codigoqr = require('qrcode-terminal');
 const  fs  = require('fs');
-
+const time = require('time');
 
 //nueva forma de autenticarse. 
 //ya no se necesitan archivos de sesiones
@@ -42,12 +42,14 @@ cliente.on('message',mensajeEntrante => {
             break;
         case "adios":
     }; */
+    var ahora = new Date()
+
     var arrayRespuestas=[
-        'estas',
-        'son',
-        'palabras',
-        'aleatorias',
-        'de saludos'
+        'estas bien?, un gusto saludarte',
+        `son las ${ahora.getHours()} en este momento, en serio me escribes a esta hora?`,
+        'palabras, siempre palabras. por que no me dices de una vez que quieres?',
+        'aleatoriamente podrias mejorar lo que me dices',
+        'primero el mensaje de saludos, bien.'
     ]
     
     if(mensajeEntrante.body.toLowerCase().search(/hola/)>=0){//si el mensaje viene con la palabra hola responde un saludo al azar
