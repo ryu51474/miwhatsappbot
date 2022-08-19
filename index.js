@@ -45,7 +45,7 @@ cliente.on('message',mensajeEntrante => {
 
     var arrayRespuestas=[
         'estas bien?, un gusto saludarte',
-        `son las ${ahora.getHours()} en este momento, en serio me escribes a esta hora?`,
+        `son las ${ahora.getHours()}:${ahora.getMinutes()} en este momento, en serio me escribes a esta hora?`,
         'palabras, siempre palabras. por que no me dices de una vez que quieres?',
         'aleatoriamente podrias mejorar lo que me dices',
         'primero el mensaje de saludos, bien.'
