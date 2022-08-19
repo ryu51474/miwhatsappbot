@@ -2,7 +2,6 @@
 const { Client, LocalAuth, Buttons } = require('whatsapp-web.js');
 const codigoqr = require('qrcode-terminal');
 const  fs  = require('fs');
-const express = require('express');
 
 
 //nueva forma de autenticarse. 
@@ -28,6 +27,7 @@ cliente.on('auth_failure', (errorAutenticacion) => {
      console.log('fallo el inicio de sesion porque: ',errorAutenticacion)
     // connectionLost()
 });
+
 
 
 //para recibir y escuchar los mensajes entrantes
