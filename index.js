@@ -2,6 +2,8 @@
 const { Client, LocalAuth, Buttons } = require('whatsapp-web.js');
 const codigoqr = require('qrcode-terminal');
 const  fs  = require('fs');
+const express = require('express');
+
 
 //nueva forma de autenticarse. 
 //ya no se necesitan archivos de sesiones
