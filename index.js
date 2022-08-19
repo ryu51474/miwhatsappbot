@@ -1,5 +1,5 @@
 
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth, Buttons } = require('whatsapp-web.js');
 const codigoqr = require('qrcode-terminal');
 const  fs  = require('fs');
 
@@ -40,9 +40,16 @@ cliente.on('message',mensajeEntrante => {
             break;
         case "adios":
     }; */
-    var array =['estas','son','palabras','aleatorias']
-    if(mensajeEntrante.body.toLowerCase().search(/hola/)>=0){
-        cliente.sendMessage(mensajeEntrante.from,array[Math.floor(Math.random()*5)]);
+    var arrayRespuestas=[
+        'estas',
+        'son',
+        'palabras',
+        'aleatorias',
+        'de saludos'
+    ]
+    
+    if(mensajeEntrante.body.toLowerCase().search(/hola/)>=0){//si el mensaje viene con la palabra hola responde un saludo al azar
+        cliente.sendMessage(mensajeEntrante.from,arrayRespuestas[Math.floor(Math.random()*arrayRespuestas.length)]);
     }else{
         cliente.sendMessage(mensajeEntrante.from,'no funciono');
 
