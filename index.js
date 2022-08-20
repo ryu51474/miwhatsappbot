@@ -1,7 +1,7 @@
 
 const { Client, LocalAuth, Buttons } = require('whatsapp-web.js');
 const codigoqr = require('qrcode-terminal');
-const  fs  = require('fs');
+//const  fs  = require('fs');
 const clever =require('cleverbot-free');
 //nueva forma de autenticarse. 
 //ya no se necesitan archivos de sesiones
@@ -19,7 +19,7 @@ cliente.on('qr',qr => {
     console.log('se inicia sesion');
 });
 cliente.on('ready',()=>{
-    console.log('cliente inicializado');
+    console.log('cliente inicializado, ya se puede operar');
 })
 
 cliente.on('auth_failure', (errorAutenticacion) => {
@@ -33,7 +33,7 @@ cliente.on('auth_failure', (errorAutenticacion) => {
 cliente.on('message',mensajeEntrante => {
     let cuerpoMensaje = mensajeEntrante.body;
     console.log(mensajeEntrante.body);
-    let nombreNotificacion = mensajeEntrante.notifyName;
+    let nombreNotificacion = mensajeEntrante._data.notifyName;
     console.log(nombreNotificacion);
     let numeroEmisor=mensajeEntrante.from;
     console.log(mensajeEntrante.from);
