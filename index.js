@@ -31,9 +31,14 @@ cliente.on('auth_failure', (errorAutenticacion) => {
 
 //para recibir y escuchar los mensajes entrantes
 cliente.on('message',mensajeEntrante => {
+    let cuerpoMensaje = mensajeEntrante.body;
     console.log(mensajeEntrante.body);
+    let nombreNotificacion = mensajeEntrante.notifyName;
+    console.log(nombreNotificacion);
+    let numeroEmisor=mensajeEntrante.from;
     console.log(mensajeEntrante.from);
-    console.log(mensajeEntrante);
+    console.log(mensajeEntrante.to);
+
     //division segun tipo de mensaje TENGO QUE PENSAR BIEN ESTO
     /* switch(mensajeEntrante.body.toLowerCase()){
         case "hola":
@@ -41,22 +46,32 @@ cliente.on('message',mensajeEntrante => {
             break;
         case "adios":
     }; */
-    var ahora = new Date()
-
-    var arrayRespuestas=[
-        'estas bien?, un gusto saludarte',
-        `son las ${ahora.getHours()}:${ahora.getMinutes()} en este momento, en serio me escribes a esta hora?`,
-        'palabras, siempre palabras. por que no me dices de una vez que quieres?',
-        'aleatoriamente podrias mejorar lo que me dices',
-        'primero el mensaje de saludos, bien.'
-    ]
+    
     
     if(mensajeEntrante.body.toLowerCase().search(/hola/)>=0){//si el mensaje viene con la palabra hola responde un saludo al azar
-        cliente.sendMessage(mensajeEntrante.from,arrayRespuestas[Math.floor(Math.random()*arrayRespuestas.length)]);
-    }else{
-        cliente.sendMessage(mensajeEntrante.from,clever(mensajeEntrante.body.toLowerCase()).then(respuestaclever));
+        var ahora = new Date()
 
+        var arrayRespuestas=[
+            `estas bien?, un gusto saludarte ${nombreNotificacion}`,
+            `son las ${ahora.getHours()}:${ahora.getMinutes()} en este momento, en serio me escribes a esta hora ${nombreNotificacion}?`,
+            `palabras, siempre palabras. por que no me dices de una vez que quieres ${nombreNotificacion}?`,
+            `${nombreNotificacion}, podrias mejorar lo que me dices`,
+            `primero el mensaje de saludos, bien ${nombreNotificacion}`
+        ]
+        mensajeRespuestaSaludoAzar=arrayRespuestas[Math.floor(Math.random()*arrayRespuestas.length)]
+        cliente.sendMessage(mensajeEntrante.from,mensajeRespuestaSaludoAzar);
+        console.log(mensajeRespuestaSaludoAzar);
+        
+    }else{
+        //mensajeCleverbot=clever(mensajeEntrante.body.toLowerCase()).then(respuestaclever);
+        //console.log(mensajeCleverbot);
+        //cliente.sendMessage(mensajeEntrante.from,"no dijiste hola");
+        clever(cuerpoMensaje).then(async respuestacleverBot=>{
+            await console.log(respuestacleverBot);
+            cliente.sendMessage(numeroEmisor,respuestacleverBot)
+        })
     }
+
 })
 
 cliente.initialize();
