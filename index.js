@@ -2,7 +2,7 @@
 const { Client, LocalAuth, Buttons } = require('whatsapp-web.js');
 const codigoqr = require('qrcode-terminal');
 const  fs  = require('fs');
-
+const clever =require('cleverbot-free');
 //nueva forma de autenticarse. 
 //ya no se necesitan archivos de sesiones
 // porque los guarda localmente
@@ -54,7 +54,7 @@ cliente.on('message',mensajeEntrante => {
     if(mensajeEntrante.body.toLowerCase().search(/hola/)>=0){//si el mensaje viene con la palabra hola responde un saludo al azar
         cliente.sendMessage(mensajeEntrante.from,arrayRespuestas[Math.floor(Math.random()*arrayRespuestas.length)]);
     }else{
-        cliente.sendMessage(mensajeEntrante.from,'no funciono');
+        cliente.sendMessage(mensajeEntrante.from,clever(mensajeEntrante.body.toLowerCase()).then(respuestaclever));
 
     }
 })
