@@ -3,6 +3,10 @@ const { Client, LocalAuth, Buttons } = require('whatsapp-web.js');
 const codigoqr = require('qrcode-terminal');
 //const  fs  = require('fs');
 const clever =require('cleverbot-free');
+//const chatbot = require('espchatbotapi'); DEPRECADO TEMPORALMENTE POR SER MUY BASICO EN RESPUESTAS
+//chatbotespanol = new chatbot('default','default')//('token','identificador') DEPRECADO TEMPORALMENTE POR SER MUY BASICO EN RESPUESTAS
+
+
 //nueva forma de autenticarse. 
 //ya no se necesitan archivos de sesiones
 // porque los guarda localmente
@@ -39,13 +43,15 @@ cliente.on('message',mensajeEntrante => {
     console.log(mensajeEntrante.from);
     console.log(mensajeEntrante.to);
 
-    //division segun tipo de mensaje TENGO QUE PENSAR BIEN ESTO
-    /* switch(mensajeEntrante.body.toLowerCase()){
-        case "hola":
-            cliente.sendMessage(mensajeEntrante.from,'respuesta automatica');
-            break;
-        case "adios":
-    }; */
+    /**
+
+chatbotespanol.obtener("hola").then(respuesta => {
+    console.log(respuesta) //respuesta al texto
+}).catch(err => {
+  console.log(err) //Solo saltara si hay un error mandando el error a la consola
+})
+     * 
+     */
     
     
     if(mensajeEntrante.body.toLowerCase().search(/hola/)>=0){//si el mensaje viene con la palabra hola responde un saludo al azar
@@ -66,10 +72,28 @@ cliente.on('message',mensajeEntrante => {
         //mensajeCleverbot=clever(mensajeEntrante.body.toLowerCase()).then(respuestaclever);
         //console.log(mensajeCleverbot);
         //cliente.sendMessage(mensajeEntrante.from,"no dijiste hola");
+
+        /**contesta cleverbot */
         clever(cuerpoMensaje).then(async respuestacleverBot=>{
-            await console.log(respuestacleverBot);
+            await console.log('respuesta cleverbot: '+ respuestacleverBot);
             cliente.sendMessage(numeroEmisor,respuestacleverBot)
         })
+        .catch(errorCleverbot=>{
+            console.log(errorCleverbot);
+            cliente.sendMessage(numeroEmisor,`Por el momento tengo problemas para responder. escribeme mas tarde ${nombreNotificacion}`);
+        });
+
+        /**contesta chatbot en español DEPRECADO TEMPORALMENTE POR SER MUY BASICO EN RESPUESTAS */ 
+        /*
+        chatbotespanol.obtener(cuerpoMensaje).then(respuestaChatbotEspanol=>{
+            console.log('respuesta chatbot español: '+respuestaChatbotEspanol);
+            cliente.sendMessage(numeroEmisor,respuestaChatbotEspanol);
+        }).catch(errorRespuestahatbotEspanol=>{
+            console.log(errorRespuestahatbotEspanol);
+            cliente.sendMessage(numeroEmisor,`${nombreNotificacion}, por el momento tengo problemas para responder. escribeme mas tarde`);
+        }
+        );
+        */
     }
 
 })
