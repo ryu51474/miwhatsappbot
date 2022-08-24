@@ -20,7 +20,7 @@ cliente = new Client({
 cliente.on('qr',qr => {
     console.log('no habia sesion iniciada');
     codigoqr.generate(qr,{small:true});
-    console.log('se inicia sesion');
+    console.log('se inicia sesion, por favor escanee el qr de arriba');
 });
 cliente.on('ready',()=>{
     console.log('cliente inicializado, ya se puede operar');
@@ -43,6 +43,7 @@ cliente.on('message',mensajeEntrante => {
     console.log(mensajeEntrante.from);
     console.log(mensajeEntrante.to);
 
+    var ahora = new Date() //se ha subido aqui, sacado del primer if porque solo debe responder el bot si es muy tarde
     /**
 
 chatbotespanol.obtener("hola").then(respuesta => {
@@ -55,7 +56,6 @@ chatbotespanol.obtener("hola").then(respuesta => {
     
     
     if(mensajeEntrante.body.toLowerCase().search(/hola/)>=0){//si el mensaje viene con la palabra hola responde un saludo al azar
-        var ahora = new Date()
 
         var arrayRespuestas=[
             `estas bien?, un gusto saludarte ${nombreNotificacion}`,
@@ -68,6 +68,19 @@ chatbotespanol.obtener("hola").then(respuesta => {
         cliente.sendMessage(mensajeEntrante.from,mensajeRespuestaSaludoAzar);
         console.log(mensajeRespuestaSaludoAzar);
         
+    }else if(cuerpoMensaje.toLowerCase().search(/nota/)>=0){//si en el mensaje existe la palabra nota da instrucciones para recibir notas
+        cliente.sendMessage(numeroEmisor,`${nombreNotificacion}, si deseas saber notas debes de ahora ingresar solo tu rut, sin puntos ni guión, en caso de terminar en k reemplácelo con un 1, ej: el rut 12.345.678-k se escribe 123456781. SI NO LO HACE CORRECTAMENTE SU PETICION SERA ANULADA E IGNORADA (Puede que se responda con cualquier cosa absurda)`);
+    }else if(!isNaN(cuerpoMensaje)){//si escribe un numero se toma como un rut y se analiza si se puede sacar las notas
+        var RUT=cuerpoMensaje.replace(/[\.,-]/g,'')//no tiene sentido el    .replace(/k/gi,'1')
+        cliente.sendMessage(numeroEmisor,'Espere un momento mientras reviso sus datos. si no respondo en un tiempo prudencial puede volver a intentarlo enviando nuevamente su rut');
+        cliente.sendMessage(numeroEmisor,fetch('https://thesimpsonsquoteapi.glitch.me/quotes?character=homer') /**HAY QUE ESTUDIAR ESTE COMANDO */
+                                        .then(respuestaAPI=>{
+                                            cliente.sendMessage(numeroEmisor,respuestaAPI)
+                                        })
+                                        .catch(errorQuery=>{
+                                            cliente.sendMessage(numeroEmisor,'error de peticion al servidor: '+errorQuery);
+                                        }))
+        console.log(RUT);
     }else{
         //mensajeCleverbot=clever(mensajeEntrante.body.toLowerCase()).then(respuestaclever);
         //console.log(mensajeCleverbot);
