@@ -1,11 +1,9 @@
 
 const { Client, LocalAuth, Buttons } = require('whatsapp-web.js');
 const codigoqr = require('qrcode-terminal');
-//const fetch = import('node-fetch');
 //const  fs  = require('fs');
 const clever =require('cleverbot-free');
-//const chatbot = require('espchatbotapi'); DEPRECADO TEMPORALMENTE POR SER MUY BASICO EN RESPUESTAS
-//chatbotespanol = new chatbot('default','default')//('token','identificador') DEPRECADO TEMPORALMENTE POR SER MUY BASICO EN RESPUESTAS
+const fetch = require('isomorphic-fetch');
 
 
 //nueva forma de autenticarse. 
@@ -45,15 +43,6 @@ cliente.on('message',mensajeEntrante => {
     console.log(mensajeEntrante.to);
 
     var ahora = new Date() //se ha subido aqui, sacado del primer if porque solo debe responder el bot si es muy tarde
-    /**
-
-chatbotespanol.obtener("hola").then(respuesta => {
-    console.log(respuesta) //respuesta al texto
-}).catch(err => {
-  console.log(err) //Solo saltara si hay un error mandando el error a la consola
-})
-     * 
-     */
     
     
     if(mensajeEntrante.body.toLowerCase().search(/hola/)>=0){//si el mensaje viene con la palabra hola responde un saludo al azar
@@ -74,18 +63,25 @@ chatbotespanol.obtener("hola").then(respuesta => {
     }else if(!isNaN(cuerpoMensaje)){//si escribe un numero se toma como un rut y se analiza si se puede sacar las notas
         var RUT=cuerpoMensaje.replace(/[\.,-]/g,'')//no tiene sentido el    .replace(/k/gi,'1')
         cliente.sendMessage(numeroEmisor,'Espere un momento mientras reviso sus datos. si no respondo en un tiempo prudencial puede volver a intentarlo enviando nuevamente su rut');
-        cliente.sendMessage(numeroEmisor,fetch('https://thesimpsonsquoteapi.glitch.me/quotes?character=homer') /**HAY QUE ESTUDIAR ESTE COMANDO */
-                                        .then( respuestaAPI=>{
-                                            return respuestaAPI.json();
-                                        })
-                                        .then(async respuestaPromesaAPI=>{
-                                            await cliente.sendMessage(numeroEmisor,respuestaPromesaAPI.toString())
-                                        })
-                                        .catch(errorQuery=>{
-                                            cliente.sendMessage(numeroEmisor,'error de peticion al servidor: '+errorQuery);
-                                        }))
-        console.log(RUT);
-    }else{
+        //cliente.sendMessage(numeroEmisor,apirespuestafinal.toString());
+    }else if(cuerpoMensaje.toLowerCase().search(/simpson/)>=0){
+        const urlAPI='https://thesimpsonsquoteapi.glitch.me/quotes?character=homer';
+        const urlApIEsp='https://los-simpsons-quotes.herokuapp.com/v1/quotes'
+        fetch(urlApIEsp)
+                .then(APIpromiseresponse=>{console.log('aqui');return APIpromiseresponse.json()})
+                .then( respuestaObjetoAPI=>{
+                    console.log(respuestaObjetoAPI[0]);
+                    //await apirespuestafinal.push(respuestaObjetoAPI[0].quote);
+                    console.log(respuestaObjetoAPI[0].quote);
+                    console.log(respuestaObjetoAPI[0].author);
+                    cliente.sendMessage(numeroEmisor,respuestaObjetoAPI[0].quote);
+                    cliente.sendMessage(numeroEmisor,'Atte: '+respuestaObjetoAPI[0].author);
+                })
+                .catch(respuestaError=>{
+                    console.log(respuestaError)
+                });
+    }
+    else{
         //mensajeCleverbot=clever(mensajeEntrante.body.toLowerCase()).then(respuestaclever);
         //console.log(mensajeCleverbot);
         //cliente.sendMessage(mensajeEntrante.from,"no dijiste hola");
@@ -99,18 +95,6 @@ chatbotespanol.obtener("hola").then(respuesta => {
             console.log(errorCleverbot);
             cliente.sendMessage(numeroEmisor,`Por el momento tengo problemas para responder. escribeme mas tarde ${nombreNotificacion}`);
         });
-
-        /**contesta chatbot en español DEPRECADO TEMPORALMENTE POR SER MUY BASICO EN RESPUESTAS */ 
-        /*
-        chatbotespanol.obtener(cuerpoMensaje).then(respuestaChatbotEspanol=>{
-            console.log('respuesta chatbot español: '+respuestaChatbotEspanol);
-            cliente.sendMessage(numeroEmisor,respuestaChatbotEspanol);
-        }).catch(errorRespuestahatbotEspanol=>{
-            console.log(errorRespuestahatbotEspanol);
-            cliente.sendMessage(numeroEmisor,`${nombreNotificacion}, por el momento tengo problemas para responder. escribeme mas tarde`);
-        }
-        );
-        */
     }
 
 })
