@@ -2,6 +2,8 @@
   "dependencies": {
     "cleverbot-free": "^1.1.11",
     "espchatbotapi": "^2.0.18",
+    "node-fetch": "^3.2.10",
+    "nodemon": "^2.0.19",
     "qrcode-terminal": "^0.12.0",
     "whatsapp-web.js": "^1.17.1"
   },

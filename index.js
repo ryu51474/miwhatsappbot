@@ -1,6 +1,7 @@
 
 const { Client, LocalAuth, Buttons } = require('whatsapp-web.js');
 const codigoqr = require('qrcode-terminal');
+//const fetch = import('node-fetch');
 //const  fs  = require('fs');
 const clever =require('cleverbot-free');
 //const chatbot = require('espchatbotapi'); DEPRECADO TEMPORALMENTE POR SER MUY BASICO EN RESPUESTAS
@@ -74,8 +75,11 @@ chatbotespanol.obtener("hola").then(respuesta => {
         var RUT=cuerpoMensaje.replace(/[\.,-]/g,'')//no tiene sentido el    .replace(/k/gi,'1')
         cliente.sendMessage(numeroEmisor,'Espere un momento mientras reviso sus datos. si no respondo en un tiempo prudencial puede volver a intentarlo enviando nuevamente su rut');
         cliente.sendMessage(numeroEmisor,fetch('https://thesimpsonsquoteapi.glitch.me/quotes?character=homer') /**HAY QUE ESTUDIAR ESTE COMANDO */
-                                        .then(respuestaAPI=>{
-                                            cliente.sendMessage(numeroEmisor,respuestaAPI)
+                                        .then( respuestaAPI=>{
+                                            return respuestaAPI.json();
+                                        })
+                                        .then(async respuestaPromesaAPI=>{
+                                            await cliente.sendMessage(numeroEmisor,respuestaPromesaAPI.toString())
                                         })
                                         .catch(errorQuery=>{
                                             cliente.sendMessage(numeroEmisor,'error de peticion al servidor: '+errorQuery);
