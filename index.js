@@ -4,6 +4,7 @@ const codigoqr = require('qrcode-terminal');
 //const  fs  = require('fs');
 const clever =require('cleverbot-free');
 const fetch = require('isomorphic-fetch');
+const nodeHtmlParse = require('node-html-parser');//se sigue investigando esta libreria
 
 
 //nueva forma de autenticarse. 
@@ -63,6 +64,30 @@ cliente.on('message',mensajeEntrante => {
     }else if(!isNaN(cuerpoMensaje)){//si escribe un numero se toma como un rut y se analiza si se puede sacar las notas
         var RUT=cuerpoMensaje.replace(/[\.,-]/g,'')//no tiene sentido el    .replace(/k/gi,'1')
         cliente.sendMessage(numeroEmisor,'Espere un momento mientras reviso sus datos. si no respondo en un tiempo prudencial puede volver a intentarlo enviando nuevamente su rut');
+        const urlApiNotas='https://script.google.com/macros/s/AKfycbyYYD23WAZ2_XBfRBgbeX4R5XqCwbfaPvrYkKQ38Dh7J3oPGKKQqv-3l8m8XxR_OaEKoQ/exec?sdata='
+        fetch(urlApiNotas+cuerpoMensaje)
+            .then(respuestaApiNotas=>{
+                return respuestaApiNotas;
+            })
+            .then(direccionObtenida=>{
+                fetch(direccionObtenida.url)
+                    .then(respuestadeDireccion=>{
+                        return respuestadeDireccion.text();
+                    })
+                    .then(respuestaTextodeDireccion=>{
+                        console.log('todo bien con el string html');//ahora hasta aqui todo bien ya no nececito imprimir todo el string html
+                        var HTMLParser=new nodeHtmlParse();//corregir esta linea
+                        var documento=HTMLParser.parse(respuestaTextodeDireccion);//corregis esto tambien
+                        cliente.sendMessage(numeroEmisor,documento);
+                    })
+                    .catch(errorDireccionObtenida=>{
+                        console.log('error de direccion obtenida url porque: '+errorDireccionObtenida)
+                    });
+                
+            })
+            .catch(errorApiNotas=>{
+                console.log('error en la api de notas porque: '+errorApiNotas);
+            });
         //cliente.sendMessage(numeroEmisor,apirespuestafinal.toString());
     }else if(cuerpoMensaje.toLowerCase().search(/simpson/)>=0){
         const urlAPI='https://thesimpsonsquoteapi.glitch.me/quotes?character=homer';
