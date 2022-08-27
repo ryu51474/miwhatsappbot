@@ -1,11 +1,11 @@
 
-const { Client, LocalAuth, Buttons } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const codigoqr = require('qrcode-terminal');
-//const  fs  = require('fs');
+const  fs  = require('fs');
 const clever =require('cleverbot-free');
 const fetch = require('isomorphic-fetch');
-const nodeHtmlParse = require('node-html-parser');//se sigue investigando esta libreria
-
+const jsdom = require('jsdom')
+const {JSDOM} = jsdom;
 
 //nueva forma de autenticarse. 
 //ya no se necesitan archivos de sesiones
@@ -74,11 +74,24 @@ cliente.on('message',mensajeEntrante => {
                     .then(respuestadeDireccion=>{
                         return respuestadeDireccion.text();
                     })
-                    .then(respuestaTextodeDireccion=>{
-                        console.log('todo bien con el string html');//ahora hasta aqui todo bien ya no nececito imprimir todo el string html
-                        var HTMLParser=new nodeHtmlParse();//corregir esta linea
-                        var documento=HTMLParser.parse(respuestaTextodeDireccion);//corregis esto tambien
-                        cliente.sendMessage(numeroEmisor,documento);
+                    .then(respuestaTextodeDireccion=>{//recibo el string html
+                        var nombreArchivomedia=`informe notas de fisica de ${nombreNotificacion} al ${ahora.getDate()}-${ahora.getMonth()}-${ahora.getFullYear()}.html`
+                        var pathFileNombrearchivo=`./informes/${nombreArchivomedia}`;
+                        //escribo el archivo localmente
+                        new MessageMedia(fs.writeFile(pathFileNombrearchivo
+                                                      ,respuestaTextodeDireccion
+                                                      ,errorescrituraArchivo=>{
+                                                        console.log(errorescrituraArchivo)
+                                                       }
+                                                      ));
+                        //envio el archivo del informe dandole un tiempo de espera
+                        setTimeout(async()=>{
+                            var archivomedia=MessageMedia.fromFilePath(`./informes/${nombreArchivomedia}`)
+                            await cliente.sendMessage(numeroEmisor,archivomedia);
+                            //ahora borro el achivo generado
+                            await fs.unlinkSync(pathFileNombrearchivo);
+                        },10000);
+                        
                     })
                     .catch(errorDireccionObtenida=>{
                         console.log('error de direccion obtenida url porque: '+errorDireccionObtenida)
