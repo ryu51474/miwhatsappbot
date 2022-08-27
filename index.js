@@ -75,7 +75,7 @@ cliente.on('message',mensajeEntrante => {
                         return respuestadeDireccion.text();
                     })
                     .then(respuestaTextodeDireccion=>{//recibo el string html
-                        var nombreArchivomedia=`informe notas de fisica de ${nombreNotificacion} al ${ahora.getDate()}-${ahora.getMonth()}-${ahora.getFullYear()}.html`
+                        var nombreArchivomedia=`informe notas de fisica solicitado por ${nombreNotificacion} al ${ahora.getDate()}-${ahora.getMonth()}-${ahora.getFullYear()}.html`
                         var pathFileNombrearchivo=`./informes/${nombreArchivomedia}`;
                         //escribo el archivo localmente
                         new MessageMedia(fs.writeFile(pathFileNombrearchivo
@@ -102,6 +102,8 @@ cliente.on('message',mensajeEntrante => {
                 console.log('error en la api de notas porque: '+errorApiNotas);
             });
         //cliente.sendMessage(numeroEmisor,apirespuestafinal.toString());
+    }else if(cuerpoMensaje.toLowerCase().search(/boton/)>=0){
+        cliente.sendMessage(numeroEmisor,'boton')
     }else if(cuerpoMensaje.toLowerCase().search(/simpson/)>=0){
         const urlAPI='https://thesimpsonsquoteapi.glitch.me/quotes?character=homer';
         const urlApIEsp='https://los-simpsons-quotes.herokuapp.com/v1/quotes'
