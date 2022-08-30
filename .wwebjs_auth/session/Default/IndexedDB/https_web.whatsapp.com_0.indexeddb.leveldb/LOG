@@ -1,0 +1,21 @@
+2022/08/30-15:56:59.649 b203 Creating DB /Users/daniel/Downloads/miwhatsappbot/.wwebjs_auth/session/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb since it was missing.
+2022/08/30-15:56:59.688 b203 Reusing MANIFEST /Users/daniel/Downloads/miwhatsappbot/.wwebjs_auth/session/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2022/08/30-15:57:38.347 b203 Level-0 table #5: started
+2022/08/30-15:57:38.394 b203 Level-0 table #5: 1148537 bytes OK
+2022/08/30-15:57:38.439 b203 Delete type=0 #3
+2022/08/30-15:57:52.632 b203 Level-0 table #7: started
+2022/08/30-15:57:52.674 b203 Level-0 table #7: 1048501 bytes OK
+2022/08/30-15:57:52.707 b203 Delete type=0 #4
+2022/08/30-15:57:53.795 15303 Compacting 1@1 + 1@2 files
+2022/08/30-15:57:53.893 15303 Generated table #8@1: 19271 keys, 1217751 bytes
+2022/08/30-15:57:53.893 15303 Compacted 1@1 + 1@2 files => 1217751 bytes
+2022/08/30-15:57:53.930 15303 compacted to: files[ 0 0 1 0 0 0 0 ]
+2022/08/30-15:57:53.930 15303 Delete type=2 #7
+2022/08/30-15:57:53.930 15303 Delete type=2 #5
+2022/08/30-15:58:38.411 16303 Level-0 table #10: started
+2022/08/30-15:58:38.476 16303 Level-0 table #10: 1108247 bytes OK
+2022/08/30-15:58:38.512 16303 Delete type=0 #6
+2022/08/30-15:58:38.573 15703 Compacting 1@1 + 1@2 files
+2022/08/30-15:58:38.800 15703 Generated table #11@1: 33500 keys, 1646288 bytes
+2022/08/30-15:58:38.800 15703 Compacted 1@1 + 1@2 files => 1646288 bytes
+2022/08/30-15:58:38.829 15703 compacted to: files[ 0 0 1 0 0 0 0 ]

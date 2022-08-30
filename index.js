@@ -1,8 +1,24 @@
 const { Client, LocalAuth, MessageMedia, Buttons } = require("whatsapp-web.js");
+const express = require('express');
+const appExpress = express();
 const codigoqr = require("qrcode-terminal");
 const fs = require("fs");
 const clever = require("cleverbot-free");
 const fetch = require("isomorphic-fetch");
+
+//seccion express de experimentacion para implementar ya a produccion
+const puerto=process.env.PORT||3000
+appExpress.get('/',(requerimiento,respuesta)=>{
+    //console.log('iniciando express');
+    respuesta.send('pagina en linea');
+    //console.log('respuesta enviada');
+});
+appExpress.get('/qr',(qr,respuesta)=>{
+    respuesta.send('pagina de qr');
+});
+
+
+
 
 //nueva forma de autenticarse.
 //ya no se necesitan archivos de sesiones
@@ -13,7 +29,7 @@ cliente = new Client({
 });
 
 //aqui se genera el codigo qr
-//SOLO si no estan los datos guardados en
+//SOLO si no estan los datos guardados en local
 cliente.on("qr", (qr) => {
   console.log("no habia sesion iniciada");
   codigoqr.generate(qr, { small: true });
@@ -119,17 +135,24 @@ cliente.on("message", (mensajeEntrante) => {
           });
       })
       .catch((errorApiNotas) => {
+        cliente.sendMessage(numeroEmisor,`Tuve problemas con tu solicitud. por: ${errorApiNotas}. Intente de nuevo, si el problema persiste favor reenvie este mensaje a dcornejo@liceotecnicotalcahuano.cl`)
         console.log("error en la api de notas porque: " + errorApiNotas);
       });
     //cliente.sendMessage(numeroEmisor,apirespuestafinal.toString());
   } else if (cuerpoMensaje.toLowerCase().search(/boton/) >= 0) {
-    mensajeEntrante.reply("quieres boton"); //responder
-    setTimeout(async () => {
+    mensajeEntrante.reply("quieres boton"); //responderal mensaje
+    let boton=new Buttons("mensajeboton",[{body:'cuerpoboton'},{body:'cuerpoboton2'}],'titulo','footer');
+    console.log(boton)
+    cliente.sendMessage(numeroEmisor,boton,true)//********falla opcion de envio, revisar */
+    cliente.sendMessage(numeroEmisor,"mande botones")
+
+
+    /* setTimeout(async () => {
       var boton = new Buttons("mensaje", [{ body: "cuerpo" }]);
       console.log(boton.buttons);
-      await cliente.sendMessage(numeroEmisor, boton);
+      await cliente.sendMessage(numeroEmisor, boton.buttons);
       cliente.sendMessage(numeroEmisor, "te mande boton");
-    }, 10000);
+    }, 10000); */
   } else if (cuerpoMensaje.toLowerCase().search(/adios/) >= 0) {
     mensajeEntrante.reply(
       "Chao. Para mas información visita cuando quieras https://www.profedaniel.cf"
@@ -156,6 +179,7 @@ cliente.on("message", (mensajeEntrante) => {
 });
 
 cliente.initialize();
+appExpress.listen(puerto,()=>{console.log(`escuchando en ${puerto}`)});
 
 /**
  * asi se presentan los datos
@@ -231,4 +255,39 @@ cliente.initialize();
   isGif: false,
   isEphemeral: false,
   links: []
+
+
+
+
+
+  wwebjssender fallido
+  const WwebjsSender = require('@deathabyss/wwebjs-sender')
+  let embebido= new WwebjsSender.MessageEmbed()
+    .sizeEmbed(28)//numero estandar
+    .setTitle("✅ | Titulo embebido process!") //titulo
+    .setDescription("descripcion del embebido")//descripcion
+    .addField("✔", "para confirm")//agrega un campo
+    .addField("❌", "To cancel")//agrega un segundo campo
+    .addFields({//agrega un campo con detalles especificos
+      name: "Now you have 2 buttons to choose!",
+      value: "✔ or ❌",
+    })
+    .setFooter("footer usando WwebjsSender")//incluye footer
+    .setTimestamp(); //imagino que es la marca de tiempo de este uso
+
+    //ahora los botones
+    let boton1=new WwebjsSender.MessageButton()
+    .setCustomId("id custom ")//un id no generico usado por mi
+    .setLabel("contenido boton ❌");
+    let boton2=new WwebjsSender.MessageButton()
+    .setCustomId("id2")
+    .setLabel("boton 2 ❌")
+
+    //se envia el boton supuestamente
+    WwebjsSender.send({
+        client:cliente,
+        number:numeroEmisor,
+        embed:embebido,
+        button:[boton1,boton2]
+    });
  */
