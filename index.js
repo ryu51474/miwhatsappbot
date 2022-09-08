@@ -5,6 +5,8 @@ const codigoqr = require("qrcode-terminal");
 const fs = require("fs");
 const clever = require("cleverbot-free");
 const fetch = require("isomorphic-fetch");
+//modulos propios externos
+const {cambioEmail,envioNotas} = require('./API_servicios/APIservicios')
 
 //seccion express de experimentacion para implementar ya a produccion
 const puerto=process.env.PORT||3000
@@ -77,6 +79,11 @@ cliente.on("message", (mensajeEntrante) => {
       `${nombreNotificacion}, si deseas saber notas debes de ahora ingresar solo tu rut, sin puntos ni guión, en caso de terminar en k reemplácelo con un 1, ej: el rut 12.345.678-k se escribe 123456781. SI NO LO HACE CORRECTAMENTE SU PETICION SERA ANULADA E IGNORADA (Puede que se responda con cualquier cosa absurda)`
     );
   } else if (!isNaN(cuerpoMensaje)) {
+        envioNotas(cliente,cuerpoMensaje,nombreNotificacion)
+    /**
+     * operacion suspendida para extraer desde modulo externo
+     */
+    /*
     //si escribe un numero se toma como un rut y se analiza si se puede sacar las notas
     var RUT = cuerpoMensaje.replace(/[\.,-]/g, ""); //no tiene sentido el    .replace(/k/gi,'1')
     cliente.sendMessage(
@@ -139,6 +146,10 @@ cliente.on("message", (mensajeEntrante) => {
         console.log("error en la api de notas porque: " + errorApiNotas);
       });
     //cliente.sendMessage(numeroEmisor,apirespuestafinal.toString());
+    */
+    /**
+     * 
+     */
   } else if (cuerpoMensaje.toLowerCase().search(/boton/) >= 0) {
     mensajeEntrante.reply("quieres boton"); //responderal mensaje
     let boton=new Buttons("mensajeboton",[{body:'cuerpoboton'},{body:'cuerpoboton2'}],'titulo','footer');

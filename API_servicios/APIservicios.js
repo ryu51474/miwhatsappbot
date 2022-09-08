@@ -1,19 +1,23 @@
 const urlApiNotas =
     "https://script.google.com/macros/s/AKfycbyYYD23WAZ2_XBfRBgbeX4R5XqCwbfaPvrYkKQ38Dh7J3oPGKKQqv-3l8m8XxR_OaEKoQ/exec?sdata=";
-    const urlApiNuevoEmail =
+const urlApiNuevoEmail =
     "https://script.google.com/macros/s/AKfycbyYYD23WAZ2_XBfRBgbeX4R5XqCwbfaPvrYkKQ38Dh7J3oPGKKQqv-3l8m8XxR_OaEKoQ/exec?sdata=";
+
+const fetch = require('isomorphic-fetch');
+const fs = require('fs');
+
 function cambioEmail(RUT,cliente,nombreNotificacion,cuerpoMensaje){
     console.log('inicia sistema de cambio de email');
 }
 
-function envioNotas(RUT,cliente,nombreNotificacion,cuerpoMensaje){
+function envioNotas(cliente,nombreNotificacion,cuerpoMensaje){
   //si escribe un numero se toma como un rut y se analiza si se puede sacar las notas
   var RUT = cuerpoMensaje.replace(/[\.,-]/g, ""); //no tiene sentido el    .replace(/k/gi,'1')
   cliente.sendMessage(
     numeroEmisor,
     "Espere un momento mientras reviso sus datos."
   );
-  fetch(urlApiNotas + cuerpoMensaje)
+  fetch(urlApiNotas + RUT)
     .then((respuestaApiNotas) => {
       return respuestaApiNotas;
     })
