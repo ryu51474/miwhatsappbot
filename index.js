@@ -54,7 +54,7 @@ cliente.on("message", (mensajeEntrante) => {
   console.log(mensajeEntrante.from);
   console.log(mensajeEntrante.to);
 
-  var ahora = new Date(); //se ha subido aqui, sacado del primer if porque solo debe responder el bot si es muy tarde
+  var ahora = new Date(); //PROCESO PENDIENTE: se ha subido aqui, sacado del primer if porque solo debe responder el bot si es muy tarde
 
   if (mensajeEntrante.body.toLowerCase().search(/hola/) >= 0) {
     //si el mensaje viene con la palabra hola responde un saludo al azar
