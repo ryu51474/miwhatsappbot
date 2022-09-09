@@ -47,7 +47,7 @@ cliente.on("auth_failure", (errorAutenticacion) => {
 });
 
 //para recibir y escuchar los mensajes entrantes
-cliente.on("message", (mensajeEntrante) => {
+cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensajes
   let cuerpoMensaje = mensajeEntrante.body;
   console.log(mensajeEntrante.body);
   let nombreNotificacion = mensajeEntrante._data.notifyName;
@@ -58,9 +58,7 @@ cliente.on("message", (mensajeEntrante) => {
 
   var ahora = new Date(); //PROCESO PENDIENTE: se ha subido aqui, sacado del primer if porque solo debe responder el bot si es muy tarde
 
-  if (mensajeEntrante.body.toLowerCase().search(/hola/) >= 0) {
-    //si el mensaje viene con la palabra hola responde un saludo al azar
-
+  if (cuerpoMensaje.toLowerCase().search(/hola/) >= 0) {//si el mensaje viene con la palabra hola responde un saludo al azar
     var arrayRespuestas = [
       `estas bien?, un gusto saludarte ${nombreNotificacion}`,
       `son las ${ahora.getHours()}:${ahora.getMinutes()} en este momento, en serio me escribes a esta hora ${nombreNotificacion}?`,
@@ -72,16 +70,13 @@ cliente.on("message", (mensajeEntrante) => {
       arrayRespuestas[Math.floor(Math.random() * arrayRespuestas.length)];
     cliente.sendMessage(mensajeEntrante.from, mensajeRespuestaSaludoAzar);
     console.log(mensajeRespuestaSaludoAzar);
-  } else if (cuerpoMensaje.toLowerCase().search(/nota/) >= 0) {
-    //si en el mensaje existe la palabra nota da instrucciones para recibir notas
+  } else if (cuerpoMensaje.toLowerCase().search(/nota/) >= 0) {//si en el mensaje existe la palabra nota da instrucciones para recibir notas
     cliente.sendMessage(
       numeroEmisor,
       `${nombreNotificacion}, si deseas saber notas debes de ahora ingresar solo tu rut, sin puntos ni guión, en caso de terminar en k reemplácelo con un 1, ej: el rut 12.345.678-k se escribe 123456781. SI NO LO HACE CORRECTAMENTE SU PETICION SERA ANULADA E IGNORADA (Puede que se responda con cualquier cosa absurda)`
     );
-  } else if (!isNaN(cuerpoMensaje)) {
-    console.log('inicio proceso de notas')
+  } else if (!isNaN(cuerpoMensaje)) {//envio de notas usando solo el rut
     envioNotas(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje)
-    console.log('fin proceso notas')
         //envioNotas(cliente,nombreNotificacion,cuerpoMensaje)
     /**
      * operacion suspendida para extraer desde modulo externo
@@ -153,7 +148,7 @@ cliente.on("message", (mensajeEntrante) => {
     /**
      * 
      */
-  } else if (cuerpoMensaje.toLowerCase().search(/boton/) >= 0) {
+  } else if (cuerpoMensaje.toLowerCase().search(/boton/) >= 0) {//podria usarse aqui para un menu con la palabra ayuda
     mensajeEntrante.reply("quieres boton"); //responderal mensaje
     let boton=new Buttons("mensajeboton",[{body:'cuerpoboton'},{body:'cuerpoboton2'}],'titulo','footer');
     console.log(boton)
@@ -167,16 +162,11 @@ cliente.on("message", (mensajeEntrante) => {
       await cliente.sendMessage(numeroEmisor, boton.buttons);
       cliente.sendMessage(numeroEmisor, "te mande boton");
     }, 10000); */
-  } else if (cuerpoMensaje.toLowerCase().search(/adios/) >= 0) {
+  } else if (cuerpoMensaje.toLowerCase().search(/adios/) >= 0) {//despedida con mensaje final
     mensajeEntrante.reply(
       "Chao. Para mas información visita cuando quieras https://www.profedaniel.cf"
     );
-  } else {
-    //mensajeCleverbot=clever(mensajeEntrante.body.toLowerCase()).then(respuestaclever);
-    //console.log(mensajeCleverbot);
-    //cliente.sendMessage(mensajeEntrante.from,"no dijiste hola");
-
-    /**contesta cleverbot */
+  } else {/**contesta cleverbot */
     clever(cuerpoMensaje)
       .then(async (respuestacleverBot) => {
         await console.log("respuesta cleverbot: " + respuestacleverBot);
@@ -193,7 +183,7 @@ cliente.on("message", (mensajeEntrante) => {
 });
 
 cliente.initialize();
-appExpress.listen(puerto,()=>{console.log(`escuchando en ${puerto}`)});
+appExpress.listen(puerto,()=>{console.log(`escuchando en https://localhost:${puerto}`)});
 
 /**
  * asi se presentan los datos
