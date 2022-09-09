@@ -1,4 +1,4 @@
-const { Client, LocalAuth, MessageMedia, Buttons } = require("whatsapp-web.js");
+const { Client, LocalAuth,MessageMedia,Buttons } = require("whatsapp-web.js");
 const express = require('express');
 const appExpress = express();
 const codigoqr = require("qrcode-terminal");
@@ -79,7 +79,10 @@ cliente.on("message", (mensajeEntrante) => {
       `${nombreNotificacion}, si deseas saber notas debes de ahora ingresar solo tu rut, sin puntos ni guión, en caso de terminar en k reemplácelo con un 1, ej: el rut 12.345.678-k se escribe 123456781. SI NO LO HACE CORRECTAMENTE SU PETICION SERA ANULADA E IGNORADA (Puede que se responda con cualquier cosa absurda)`
     );
   } else if (!isNaN(cuerpoMensaje)) {
-        envioNotas(cliente,cuerpoMensaje,nombreNotificacion)
+    console.log('inicio proceso de notas')
+    envioNotas(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje)
+    console.log('fin proceso notas')
+        //envioNotas(cliente,nombreNotificacion,cuerpoMensaje)
     /**
      * operacion suspendida para extraer desde modulo externo
      */

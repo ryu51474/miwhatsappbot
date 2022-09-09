@@ -3,14 +3,16 @@ const urlApiNotas =
 const urlApiNuevoEmail =
     "https://script.google.com/macros/s/AKfycbyYYD23WAZ2_XBfRBgbeX4R5XqCwbfaPvrYkKQ38Dh7J3oPGKKQqv-3l8m8XxR_OaEKoQ/exec?sdata=";
 
+const {MessageMedia} = require('whatsapp-web.js');
 const fetch = require('isomorphic-fetch');
 const fs = require('fs');
+var ahora=new Date();
 
-function cambioEmail(RUT,cliente,nombreNotificacion,cuerpoMensaje){
+function cambioEmail(cliente,nombreNotificacion,cuerpoMensaje){
     console.log('inicia sistema de cambio de email');
 }
 
-function envioNotas(cliente,nombreNotificacion,cuerpoMensaje){
+function envioNotas(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje){
   //si escribe un numero se toma como un rut y se analiza si se puede sacar las notas
   var RUT = cuerpoMensaje.replace(/[\.,-]/g, ""); //no tiene sentido el    .replace(/k/gi,'1')
   cliente.sendMessage(
@@ -74,7 +76,7 @@ function envioNotas(cliente,nombreNotificacion,cuerpoMensaje){
 }
 
 
-module.exports[
+module.exports={
     cambioEmail,
     envioNotas
-]
+}
