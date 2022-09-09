@@ -73,7 +73,7 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
   } else if (cuerpoMensaje.toLowerCase().search(/nota/) >= 0) {//si en el mensaje existe la palabra nota da instrucciones para recibir notas
     cliente.sendMessage(
       numeroEmisor,
-      `${nombreNotificacion}, si deseas saber notas debes de ahora ingresar solo tu rut, sin puntos ni guión, en caso de terminar en k reemplácelo con un 1, ej: el rut 12.345.678-k se escribe 123456781. SI NO LO HACE CORRECTAMENTE SU PETICION SERA ANULADA E IGNORADA (Puede que se responda con cualquier cosa absurda)`
+      `${nombreNotificacion}, si deseas saber notas debes de ahora ingresar solo tu rut, sin puntos ni guión, en caso de terminar en k reemplácelo con un 1, ej: el rut 12.345.678-k se escribe 123456781. si eres extranjero, no escribas el 100. SI NO LO HACE CORRECTAMENTE SU PETICION SERA ANULADA E IGNORADA (Puede que se responda con cualquier cosa absurda)`
     );
   } else if (!isNaN(cuerpoMensaje)) {//envio de notas usando solo el rut
     envioNotas(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje)
