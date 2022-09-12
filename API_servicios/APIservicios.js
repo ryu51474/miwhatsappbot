@@ -8,10 +8,31 @@ const fetch = require('isomorphic-fetch');
 const fs = require('fs');
 var ahora=new Date();
 
-function cambioEmail(cliente,nombreNotificacion,cuerpoMensaje){
-    console.log('inicia sistema de cambio de email');
-    cliente.sendMessage(numeroEmisor,`${nombreNotificacion}, cambio tu email ahora mismo, dame unos segundos para verificar tus datos`);
-    fetch(urlApiNuevoEmail+cuerpoMensaje.replace(" ",""))
+function cambioEmail(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje){
+    console.log('inicia sistema de cambio de email llamado');
+    let respuestaACambioStandard = `${nombreNotificacion}, cambio tu email a ${cuerpoMensaje.split(',')[1]} ahora mismo, dame unos segundos para verificar tus datos`;
+    cliente.sendMessage(numeroEmisor,respuestaACambioStandard);
+    fetch(urlApiNuevoEmail+cuerpoMensaje)
+      .then((respuestaApiEmail)=>{
+        return respuestaApiEmail;
+      })
+      .then((direccionObtenidaEmail)=>{
+        fetch(direccionObtenidaEmail.url)
+          .then((respuestarDireccionEmail)=>{
+            return respuestarDireccionEmail.text();
+          })
+          .then((respuestaTextodeDireccionEmail)=>{
+            //recibo el string
+            console.log(respuestaTextodeDireccionEmail)
+            cliente.sendMessage(numeroEmisor,respuestaTextodeDireccionEmail);
+          })
+          .catch((errorRespuestaDireccionEmail)=>{
+            console.log(errorRespuestaDireccionEmail);
+          })
+      })
+      .catch((errorDireccionObtenidaEmail=>{
+        console.log(errorDireccionObtenidaEmail)
+      }))
 }
 
 function envioNotas(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje){

@@ -169,7 +169,7 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
       "Chao. Para mas información visita cuando quieras https://www.profedaniel.cf"
     );
   } else if (cuerpoMensaje.toLowerCase().search(/email/)>=0){//instrucciones de cambio de email en la base de datos
-    console.log('inicio de INSTRUCCIONES DE  cambio de email');
+    console.log('inicio de envio de  INSTRUCCIONES DE  cambio de email');
     cliente.sendMessage(numeroEmisor,`${nombreNotificacion}, para cambiar tu email en el que recibes las notas debes escribir ahora tu rut sin puntos ni guion seguido de una coma y el nuevo email. SIN ESPACIOS o su solicitud será rechazada. En caso que su rut termine en k reemplácelo por un 1. Si es extranjero no escriba el 100 \n ej: 123456781,nuevocorreo@gmail.com`)
   } else if(cuerpoMensaje.toLowerCase().search(/@/)>=0){
     //se analiza si esta correcto el mensaje
@@ -181,7 +181,7 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
     console.log(nuevoEmailalumno);
     if (validadorEmail.validate(nuevoEmailalumno)){
       console.log(`${nuevoEmailalumno} es un email valido`);
-      cambioEmail(cliente,nombreNotificacion,cuerpoMensaje);
+      cambioEmail(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje);
     }
   } else if (cuerpoMensaje.toLowerCase().search(/opciones/)>=0){//opciones del bot y sus acciones
     cliente.sendMessage(numeroEmisor,`Opciones: ${nombreNotificacion} escribe en palabras tu solicitud segun lo que quieras hacer\n`+
