@@ -5,6 +5,8 @@ const codigoqr = require("qrcode-terminal");
 const fs = require("fs");
 const clever = require("cleverbot-free");
 const validadorEmail = require('email-validator')
+const { validate, clean, format, getCheckDigit } = require('rut.js')
+const validaRut = (rut)=>{return validate(rut)}
 //const fetch = require("isomorphic-fetch");
 //modulos propios externos
 const {cambioEmail,envioNotas} = require('./API_servicios/APIservicios')
@@ -78,7 +80,7 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
       numeroEmisor,
       `${nombreNotificacion}, si deseas saber notas debes de ahora ingresar solo tu rut, sin puntos ni guión, en caso de terminar en k reemplácelo con un 1, ej: el rut 12.345.678-k se escribe 123456781. si eres extranjero, no escribas el 100. SI NO LO HACE CORRECTAMENTE SU PETICION SERA ANULADA E IGNORADA (Puede que se responda con cualquier cosa absurda)`
     );
-  } else if (!isNaN(cuerpoMensaje)) {//envio de notas usando solo el rut
+  } else if (!isNaN(cuerpoMensaje)&&validaRut(cuerpoMensaje)) {//envio de notas usando solo el rut
     envioNotas(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje)
         //envioNotas(cliente,nombreNotificacion,cuerpoMensaje)
     /**
