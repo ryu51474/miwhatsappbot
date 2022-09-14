@@ -2,6 +2,7 @@ const { Client, LocalAuth,MessageMedia,Buttons, List } = require("whatsapp-web.j
 const express = require('express');
 const appExpress = express();
 const codigoqr = require("qrcode-terminal");
+const qrcodeweb = require ('qr-image')
 const fs = require("fs");
 const clever = require("cleverbot-free");
 const validadorEmail = require('email-validator')
@@ -19,12 +20,10 @@ appExpress.get('/',(requerimiento,respuesta)=>{
     //console.log('respuesta enviada');
 });
 appExpress.get('/qr',(qr,respuesta)=>{
-    respuesta.send('pagina de qr');
+    //respuesta.send('pagina de qr');
+    var ww =qrcodeweb.image('texto',{type:'svg'})
+    respuesta.send(`<span>${ww} 2</span>`);
 });
-
-
-
-
 //nueva forma de autenticarse.
 //ya no se necesitan archivos de sesiones
 // porque los guarda localmente
@@ -39,6 +38,12 @@ cliente.on("qr", (qr) => {
   console.log("no habia sesion iniciada");
   codigoqr.generate(qr, { small: true });
   console.log("se inicia sesion, por favor escanee el qr de arriba");
+  //qrcodeweb
+  /***
+   * qrcode.toString('I am a pony!',{type:'terminal'}, function (err, url) {
+  console.log(url)
+})
+   */
 });
 cliente.on("ready", () => {
   console.log("cliente inicializado, ya se puede operar");
@@ -208,114 +213,3 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
 
 cliente.initialize();
 appExpress.listen(puerto,()=>{console.log(`escuchando en https://localhost:${puerto}`)});
-
-/**
- * asi se presentan los datos
- 
- Message {
-  _data: {
-    id: {
-      fromMe: false,
-      remote: '56964289005@c.us',
-      id: '3A095D33BED965BCC70D',
-      _serialized: 'false_56964289005@c.us_3A095D33BED965BCC70D'
-    },
-    body: 'Este es un texto con hola en medios',
-    type: 'chat',
-    t: 1660445891,
-    notifyName: 'Daniel Cornejo',
-    from: '56964289005@c.us',
-    to: '56931242881@c.us',
-    self: 'in',
-    ack: 1,
-    isNewMsg: true,
-    star: false,
-    kicNotified: false,
-    recvFresh: true,
-    isFromTemplate: false,
-    pollInvalidated: false,
-    broadcast: false,
-    mentionedJidList: [],
-    isVcardOverMmsDocument: false,
-    isForwarded: false,
-    hasReaction: false,
-    ephemeralOutOfSync: false,
-    productHeaderImageRejected: false,
-    lastPlaybackProgress: 0,
-    isDynamicReplyButtonsMsg: false,
-    isMdHistoryMsg: false,
-    requiresDirectConnection: false,
-    pttForwardedFeaturesEnabled: true,
-    isEphemeral: false,
-    isStatusV3: false,
-    links: []
-  },
-  mediaKey: undefined,
-  id: {
-    fromMe: false,
-    remote: '56964289005@c.us',
-    id: '3A095D33BED965BCC70D',
-    _serialized: 'false_56964289005@c.us_3A095D33BED965BCC70D'
-  },
-  ack: 1,
-  hasMedia: false,
-  body: 'Este es un texto con hola en medios',
-  type: 'chat',
-  timestamp: 1660445891,
-  from: '56964289005@c.us',
-  to: '56931242881@c.us',
-  author: undefined,
-  deviceType: 'ios',
-  isForwarded: false,
-  forwardingScore: 0,
-  isStatus: false,
-  isStarred: false,
-  broadcast: false,
-  fromMe: false,
-  hasQuotedMsg: false,
-  duration: undefined,
-  location: undefined,
-  vCards: [],
-  inviteV4: undefined,
-  mentionedIds: [],
-  orderId: undefined,
-  token: undefined,
-  isGif: false,
-  isEphemeral: false,
-  links: []
-
-
-
-
-
-  wwebjssender fallido
-  const WwebjsSender = require('@deathabyss/wwebjs-sender')
-  let embebido= new WwebjsSender.MessageEmbed()
-    .sizeEmbed(28)//numero estandar
-    .setTitle("✅ | Titulo embebido process!") //titulo
-    .setDescription("descripcion del embebido")//descripcion
-    .addField("✔", "para confirm")//agrega un campo
-    .addField("❌", "To cancel")//agrega un segundo campo
-    .addFields({//agrega un campo con detalles especificos
-      name: "Now you have 2 buttons to choose!",
-      value: "✔ or ❌",
-    })
-    .setFooter("footer usando WwebjsSender")//incluye footer
-    .setTimestamp(); //imagino que es la marca de tiempo de este uso
-
-    //ahora los botones
-    let boton1=new WwebjsSender.MessageButton()
-    .setCustomId("id custom ")//un id no generico usado por mi
-    .setLabel("contenido boton ❌");
-    let boton2=new WwebjsSender.MessageButton()
-    .setCustomId("id2")
-    .setLabel("boton 2 ❌")
-
-    //se envia el boton supuestamente
-    WwebjsSender.send({
-        client:cliente,
-        number:numeroEmisor,
-        embed:embebido,
-        button:[boton1,boton2]
-    });
- */
