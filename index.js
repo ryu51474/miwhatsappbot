@@ -19,16 +19,10 @@ appExpress.get('/',(requerimiento,respuesta)=>{
 });
 appExpress.get('/qr',(qr,respuesta)=>{
     //respuesta.send('pagina de qr');
-<<<<<<< HEAD
     qrcodeweb.create
     respuesta.send(`<span>${qr} 1</span>`);
 });
 
-=======
-    var ww =qrcodeweb.image('texto',{type:'svg'})
-    respuesta.send(`<span>${ww} 2</span>`);
-});
->>>>>>> c75d16e4e94d6d20dd860667feb8e03b358458a8
 //nueva forma de autenticarse.
 //ya no se necesitan archivos de sesiones
 // porque los guarda localmente
@@ -146,8 +140,4 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
 });
 
 cliente.initialize();
-<<<<<<< HEAD
 appExpress.listen(puerto,()=>{console.log(`escuchando en https://localhost:${puerto}`)});
-=======
-appExpress.listen(puerto,()=>{console.log(`escuchando en https://localhost:${puerto}`)});
->>>>>>> c75d16e4e94d6d20dd860667feb8e03b358458a8
