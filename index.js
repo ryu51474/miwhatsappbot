@@ -2,7 +2,7 @@ const { Client, LocalAuth,MessageMedia,Buttons, List } = require("whatsapp-web.j
 const express = require('express');
 const appExpress = express();
 const codigoqr = require("qrcode-terminal");
-const qrcodeweb = require ('qrcode')
+const qrcodeweb = require ('node-qr-image')
 const clever = require("cleverbot-free");
 const validadorEmail = require('email-validator')
 const { validate, clean, format, getCheckDigit } = require('rut.js')
@@ -17,11 +17,7 @@ appExpress.get('/',(requerimiento,respuesta)=>{
     respuesta.send('pagina en linea');
     //console.log('respuesta enviada');
 });
-appExpress.get('/qr',(qr,respuesta)=>{
-    //respuesta.send('pagina de qr');
-    qrcodeweb.create
-    respuesta.send(`<span>${qr} 1</span>`);
-});
+
 
 //nueva forma de autenticarse.
 //ya no se necesitan archivos de sesiones
@@ -36,18 +32,15 @@ cliente = new Client({
 cliente.on("qr", (qr) => {
   console.log("no habia sesion iniciada");
   codigoqr.generate(qr, { small: true });
-  console.log("se inicia sesion, por favor escanee el qr de arriba");
-  //qrcodeweb
-  /***
-   * qrcode.toString('I am a pony!',{type:'terminal'}, function (err, url) {
-  console.log(url)
-})
-   */
+  console.log(`se inicia sesion, por favor escanee el qr de arriba o visite http://localhost:${puerto}/qr`);
+  appExpress.get('/qr',(req,responseweb)=>{
+    let qrEnPagina=qrcodeweb.imageSync(qr.toString(),{type:'svg',size:5})
+    responseweb.send(qrEnPagina)
+  })
 });
 cliente.on("ready", () => {
   console.log("cliente inicializado, ya se puede operar");
 });
-
 cliente.on("auth_failure", (errorAutenticacion) => {
   console.log("fallo el inicio de sesion porque: ", errorAutenticacion);
   // connectionLost()
