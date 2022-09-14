@@ -2,12 +2,11 @@ const { Client, LocalAuth,MessageMedia,Buttons, List } = require("whatsapp-web.j
 const express = require('express');
 const appExpress = express();
 const codigoqr = require("qrcode-terminal");
-const fs = require("fs");
+const qrcodeweb = require ('qrcode')
 const clever = require("cleverbot-free");
 const validadorEmail = require('email-validator')
 const { validate, clean, format, getCheckDigit } = require('rut.js')
 const validaRut = (rut)=>{return validate(rut)}
-//const fetch = require("isomorphic-fetch");
 //modulos propios externos
 const {cambioEmail,envioNotas} = require('./API_servicios/APIservicios')
 
@@ -19,11 +18,10 @@ appExpress.get('/',(requerimiento,respuesta)=>{
     //console.log('respuesta enviada');
 });
 appExpress.get('/qr',(qr,respuesta)=>{
-    respuesta.send('pagina de qr');
+    //respuesta.send('pagina de qr');
+    qrcodeweb.create
+    respuesta.send(`<span>${qr} 1</span>`);
 });
-
-
-
 
 //nueva forma de autenticarse.
 //ya no se necesitan archivos de sesiones
@@ -81,78 +79,7 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
       `${nombreNotificacion}, si deseas saber notas debes de ahora ingresar solo tu rut, sin puntos ni guión, en caso de terminar en k reemplácelo con un 1, ej: el rut 12.345.678-k se escribe 123456781. si eres extranjero, no escribas el 100. SI NO LO HACE CORRECTAMENTE SU PETICION SERA ANULADA E IGNORADA (Puede que se responda con cualquier cosa absurda)`
     );
   } else if (!isNaN(cuerpoMensaje)&&validaRut(cuerpoMensaje)) {//envio de notas usando solo el rut
-    envioNotas(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje)
-        //envioNotas(cliente,nombreNotificacion,cuerpoMensaje)
-    /**
-     * operacion suspendida para extraer desde modulo externo
-     */
-    /*
-    //si escribe un numero se toma como un rut y se analiza si se puede sacar las notas
-    var RUT = cuerpoMensaje.replace(/[\.,-]/g, ""); //no tiene sentido el    .replace(/k/gi,'1')
-    cliente.sendMessage(
-      numeroEmisor,
-      "Espere un momento mientras reviso sus datos."
-    );
-    const urlApiNotas =
-      "https://script.google.com/macros/s/AKfycbyYYD23WAZ2_XBfRBgbeX4R5XqCwbfaPvrYkKQ38Dh7J3oPGKKQqv-3l8m8XxR_OaEKoQ/exec?sdata=";
-    fetch(urlApiNotas + cuerpoMensaje)
-      .then((respuestaApiNotas) => {
-        return respuestaApiNotas;
-      })
-      .then((direccionObtenida) => {
-        fetch(direccionObtenida.url)
-          .then((respuestadeDireccion) => {
-            return respuestadeDireccion.text();
-          })
-          .then((respuestaTextodeDireccion) => {
-            //recibo el string html
-            if (
-              respuestaTextodeDireccion !== "Estudiante no existe, reintente"
-            ) {
-              var nombreArchivomedia = `informe notas de fisica solicitado por ${nombreNotificacion} al ${ahora.getDate()}-${ahora.getMonth()}-${ahora.getFullYear()}.html`;
-              var pathFileNombrearchivo = `./informes/${nombreArchivomedia}`;
-              //escribo el archivo localmente
-              new MessageMedia(
-                fs.writeFile(
-                  pathFileNombrearchivo,
-                  respuestaTextodeDireccion,
-                  (errorescrituraArchivo) => {
-                    console.log(errorescrituraArchivo);
-                  }
-                )
-              );
-              //envio el archivo del informe dandole un tiempo de espera
-              setTimeout(async () => {
-                var archivomedia = MessageMedia.fromFilePath(
-                  `./informes/${nombreArchivomedia}`
-                );
-                await cliente.sendMessage(numeroEmisor, archivomedia);
-                //ahora borro el achivo generado
-                await fs.unlinkSync(pathFileNombrearchivo);
-              }, 10000);
-            } else {
-              cliente.sendMessage(
-                numeroEmisor,
-                "Estudiante no existe, verifique los datos y reintente. Si el problema persiste escriba a dcornejo@liceotecnicotalcahuano.cl indicando su rut, nombre y curso"
-              );
-            }
-          })
-          .catch((errorDireccionObtenida) => {
-            console.log(
-              "error de direccion obtenida url porque: " +
-                errorDireccionObtenida
-            );
-          });
-      })
-      .catch((errorApiNotas) => {
-        cliente.sendMessage(numeroEmisor,`Tuve problemas con tu solicitud. por: ${errorApiNotas}. Intente de nuevo, si el problema persiste favor reenvie este mensaje a dcornejo@liceotecnicotalcahuano.cl`)
-        console.log("error en la api de notas porque: " + errorApiNotas);
-      });
-    //cliente.sendMessage(numeroEmisor,apirespuestafinal.toString());
-    */
-    /**
-     * 
-     */
+    envioNotas(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje);
   } else if (cuerpoMensaje.toLowerCase().search(/boton/) >= 0) {//podria usarse aqui para un menu con la palabra ayuda
     mensajeEntrante.reply("quieres boton"); //responderal mensaje
     let boton=new Buttons('mensajeboton',[{body:'cuerpoboton'},{body:'cuerpoboton2'}],'titulo','footer');
@@ -208,114 +135,3 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
 
 cliente.initialize();
 appExpress.listen(puerto,()=>{console.log(`escuchando en https://localhost:${puerto}`)});
-
-/**
- * asi se presentan los datos
- 
- Message {
-  _data: {
-    id: {
-      fromMe: false,
-      remote: '56964289005@c.us',
-      id: '3A095D33BED965BCC70D',
-      _serialized: 'false_56964289005@c.us_3A095D33BED965BCC70D'
-    },
-    body: 'Este es un texto con hola en medios',
-    type: 'chat',
-    t: 1660445891,
-    notifyName: 'Daniel Cornejo',
-    from: '56964289005@c.us',
-    to: '56931242881@c.us',
-    self: 'in',
-    ack: 1,
-    isNewMsg: true,
-    star: false,
-    kicNotified: false,
-    recvFresh: true,
-    isFromTemplate: false,
-    pollInvalidated: false,
-    broadcast: false,
-    mentionedJidList: [],
-    isVcardOverMmsDocument: false,
-    isForwarded: false,
-    hasReaction: false,
-    ephemeralOutOfSync: false,
-    productHeaderImageRejected: false,
-    lastPlaybackProgress: 0,
-    isDynamicReplyButtonsMsg: false,
-    isMdHistoryMsg: false,
-    requiresDirectConnection: false,
-    pttForwardedFeaturesEnabled: true,
-    isEphemeral: false,
-    isStatusV3: false,
-    links: []
-  },
-  mediaKey: undefined,
-  id: {
-    fromMe: false,
-    remote: '56964289005@c.us',
-    id: '3A095D33BED965BCC70D',
-    _serialized: 'false_56964289005@c.us_3A095D33BED965BCC70D'
-  },
-  ack: 1,
-  hasMedia: false,
-  body: 'Este es un texto con hola en medios',
-  type: 'chat',
-  timestamp: 1660445891,
-  from: '56964289005@c.us',
-  to: '56931242881@c.us',
-  author: undefined,
-  deviceType: 'ios',
-  isForwarded: false,
-  forwardingScore: 0,
-  isStatus: false,
-  isStarred: false,
-  broadcast: false,
-  fromMe: false,
-  hasQuotedMsg: false,
-  duration: undefined,
-  location: undefined,
-  vCards: [],
-  inviteV4: undefined,
-  mentionedIds: [],
-  orderId: undefined,
-  token: undefined,
-  isGif: false,
-  isEphemeral: false,
-  links: []
-
-
-
-
-
-  wwebjssender fallido
-  const WwebjsSender = require('@deathabyss/wwebjs-sender')
-  let embebido= new WwebjsSender.MessageEmbed()
-    .sizeEmbed(28)//numero estandar
-    .setTitle("✅ | Titulo embebido process!") //titulo
-    .setDescription("descripcion del embebido")//descripcion
-    .addField("✔", "para confirm")//agrega un campo
-    .addField("❌", "To cancel")//agrega un segundo campo
-    .addFields({//agrega un campo con detalles especificos
-      name: "Now you have 2 buttons to choose!",
-      value: "✔ or ❌",
-    })
-    .setFooter("footer usando WwebjsSender")//incluye footer
-    .setTimestamp(); //imagino que es la marca de tiempo de este uso
-
-    //ahora los botones
-    let boton1=new WwebjsSender.MessageButton()
-    .setCustomId("id custom ")//un id no generico usado por mi
-    .setLabel("contenido boton ❌");
-    let boton2=new WwebjsSender.MessageButton()
-    .setCustomId("id2")
-    .setLabel("boton 2 ❌")
-
-    //se envia el boton supuestamente
-    WwebjsSender.send({
-        client:cliente,
-        number:numeroEmisor,
-        embed:embebido,
-        button:[boton1,boton2]
-    });
- */
