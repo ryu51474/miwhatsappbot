@@ -2,12 +2,7 @@ const { Client, LocalAuth,MessageMedia,Buttons, List } = require("whatsapp-web.j
 const express = require('express');
 const appExpress = express();
 const codigoqr = require("qrcode-terminal");
-<<<<<<< HEAD
 const qrcodeweb = require ('qrcode')
-=======
-const qrcodeweb = require ('qr-image')
-const fs = require("fs");
->>>>>>> c75d16e4e94d6d20dd860667feb8e03b358458a8
 const clever = require("cleverbot-free");
 const validadorEmail = require('email-validator')
 const { validate, clean, format, getCheckDigit } = require('rut.js')
