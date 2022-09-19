@@ -92,7 +92,7 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
     let lista = new List('cuerpo de lista','btnText',secciones,'titulo','footer');
     cliente.sendMessage(numeroEmisor,lista);
     console.log('fin proceso de lista')
-  } else if (cuerpoMensaje.normalize("NFD").replace(/[\u0300-\u036f]/g, "").search(/adios/) >= 0) {//despedida con mensaje final
+  } else if (cuerpoMensaje.normalize("NFD").replace(/[\u0300-\u036f]/g, "").search(/adios/) >= 0||cuerpoMensaje.search(/chao/) >= 0) {//despedida con mensaje final
     mensajeEntrante.reply(
       "Chao. Para mas información visita cuando quieras https://www.profedaniel.cf"
     );
