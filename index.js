@@ -114,8 +114,8 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
   } else if (cuerpoMensaje.search(/opciones/)>=0){//opciones del bot y sus acciones
     cliente.sendMessage(numeroEmisor,`Opciones: ${nombreNotificacion} escribe en palabras tu solicitud segun lo que quieras hacer\n`+
                                       '1.- escribe **opciones** para volver a ver este mensaje\n'+
-                                      '2.- puedes **pedir tus notas** simplemente escribiéndolo\n'+
-                                      '3.- pideme **cambiar tu email** para cambiar tu correo para recibir resultados de las pruebas')
+                                      '2.- puedes **pedir notas** simplemente escribiéndolo\n'+
+                                      '3.- pideme **cambiar email** para cambiar tu correo para recibir resultados de las pruebas')
   } else {/**contesta cleverbot */
     clever(cuerpoMensaje)
       .then(async (respuestacleverBot) => {
