@@ -2,3 +2,4 @@ node_modules
 informes
 .wwebjs_auth
 vercel.json
+.DS_Store

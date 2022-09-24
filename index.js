@@ -49,13 +49,13 @@ cliente.on("auth_failure", (errorAutenticacion) => {
 //para recibir y escuchar los mensajes entrantes
 cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensajes
   let cuerpoMensaje = mensajeEntrante.body.toLowerCase();
-  console.log(mensajeEntrante.body);
+  //console.log(mensajeEntrante.body);
   let nombreNotificacion = mensajeEntrante._data.notifyName;
-  (nombreNotificacion.toLowerCase().search(/</)>=0)?nombreNotificacion='Estimado estudiante':
-  console.log(nombreNotificacion);
+  (nombreNotificacion.toLowerCase().search(/</)>=0)?nombreNotificacion='Estimado estudiante':nombreNotificacion=nombreNotificacion;
+  //console.log(nombreNotificacion);
   let numeroEmisor = mensajeEntrante.from;
-  console.log(mensajeEntrante.from);
-  console.log(mensajeEntrante.to);
+  //console.log(mensajeEntrante.from);
+  //console.log(mensajeEntrante.to);
 
   var ahora = new Date(); //PROCESO PENDIENTE: se ha subido aqui, sacado del primer if porque solo debe responder el bot si es muy tarde
 
@@ -71,11 +71,11 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
       arrayRespuestas[Math.floor(Math.random() * arrayRespuestas.length)];
     cliente.sendMessage(mensajeEntrante.from, mensajeRespuestaSaludoAzar);
     cliente.sendMessage(numeroEmisor,`Si deseas saber que puedo hacer por ti puedes escribir **opciones** para saberlo`)
-    console.log(mensajeRespuestaSaludoAzar);
+    //console.log(mensajeRespuestaSaludoAzar);
   } else if (cuerpoMensaje.search(/nota/) >= 0) {//si en el mensaje existe la palabra nota da instrucciones para recibir notas
     cliente.sendMessage(
       numeroEmisor,
-      `${nombreNotificacion}, si deseas saber notas debes de ahora ingresar solo tu rut, sin puntos ni guión, en caso de terminar en k reemplácelo con un 1, ej: el rut 12.345.678-k se escribe 123456781. si eres extranjero, no escribas el 100. SI NO LO HACE CORRECTAMENTE SU PETICION SERA ANULADA E IGNORADA (Puede que se responda con cualquier cosa absurda)`
+      `${nombreNotificacion}, si deseas saber notas debes de ahora ingresar solo tu rut, sin puntos ni guión, en caso de terminar en k reemplácelo con un 1, ej: el rut 12.345.678-k se escribe 123456781. Si eres extranjero, SE INCLUYE EL 100. SI NO LO HACE CORRECTAMENTE SU PETICION SERA ANULADA E IGNORADA (Puede que se responda con cualquier cosa absurda)`
     );
   } else if (!isNaN(cuerpoMensaje)&&validaRut(cuerpoMensaje)) {//envio de notas usando solo el rut
     envioNotas(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje);
@@ -97,18 +97,18 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
       "Chao. Para mas información visita cuando quieras https://www.profedaniel.cf"
     );
   } else if (cuerpoMensaje.search(/email/)>=0){//instrucciones de cambio de email en la base de datos
-    console.log('inicio de envio de  INSTRUCCIONES DE  cambio de email');
+    //console.log('inicio de envio de  INSTRUCCIONES DE  cambio de email');
     cliente.sendMessage(numeroEmisor,`${nombreNotificacion}, para cambiar tu email en el que recibes las notas debes escribir ahora tu rut sin puntos ni guion seguido de una coma y el nuevo email. SIN ESPACIOS o su solicitud será rechazada. En caso que su rut termine en k reemplácelo por un 1. Si es extranjero no escriba el 100 \n ej: 123456781,nuevocorreo@gmail.com`)
   } else if(cuerpoMensaje.search(/@/)>=0){
     //se analiza si esta correcto el mensaje
     let rutconEmail = cuerpoMensaje.split(',')
-    //regex del rut
-    let RUT = rutconEmail[0].replace(/[\.,-]/g, "");
-    console.log(RUT);
+    //regex del rut deprecado por ser innecesario para este proceso
+    //let RUT = rutconEmail[0].replace(/[\.,-]/g, "");
+    //console.log(RUT);
     var nuevoEmailalumno = rutconEmail[1].replace(" ","")
-    console.log(nuevoEmailalumno);
+    //console.log(nuevoEmailalumno);
     if (validadorEmail.validate(nuevoEmailalumno)){
-      console.log(`${nuevoEmailalumno} es un email valido`);
+      //console.log(`${nuevoEmailalumno} es un email valido`);
       cambioEmail(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje);
     }
   } else if (cuerpoMensaje.search(/opciones/)>=0){//opciones del bot y sus acciones
@@ -119,7 +119,7 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
   } else {/**contesta cleverbot */
     clever(cuerpoMensaje)
       .then(async (respuestacleverBot) => {
-        await console.log("respuesta cleverbot: " + respuestacleverBot);
+        await //console.log("respuesta cleverbot: " + respuestacleverBot);
         cliente.sendMessage(numeroEmisor, respuestacleverBot);
       })
       .catch((errorCleverbot) => {

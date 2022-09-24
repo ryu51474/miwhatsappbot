@@ -9,9 +9,11 @@ const fs = require('fs');
 var ahora=new Date();
 
 function cambioEmail(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje){
-    console.log('inicia sistema de cambio de email llamado');
+    //console.log('inicia sistema de cambio de email llamado');
     let respuestaACambioStandard = `${nombreNotificacion}, cambio tu email a ${cuerpoMensaje.split(',')[1]} ahora mismo, dame unos segundos para verificar tus datos`;
     cliente.sendMessage(numeroEmisor,respuestaACambioStandard);
+    //proceso de validacion de rut deprecado pues al cambiar email no necesita validar si es un rut valido o no
+    //if(cuerpoMensaje.split(',')[0].substring(0,3)=='100') cuerpoMensaje = cuerpoMensaje.split('100')[1]
     fetch(urlApiNuevoEmail+cuerpoMensaje)
       .then((respuestaApiEmail)=>{
         return respuestaApiEmail;
@@ -38,6 +40,7 @@ function cambioEmail(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje){
 function envioNotas(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje){
   //si escribe un numero se toma como un rut y se analiza si se puede sacar las notas
   var RUT = cuerpoMensaje.replace(/[\.,-]/g, ""); //no tiene sentido el    .replace(/k/gi,'1')
+  if (RUT.substring(0,3)=='100') RUT=RUT.split('100')[1]
   cliente.sendMessage(
     numeroEmisor,
     "Espere un momento mientras reviso sus datos."
