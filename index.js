@@ -70,7 +70,8 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
     mensajeRespuestaSaludoAzar =
       arrayRespuestas[Math.floor(Math.random() * arrayRespuestas.length)];
     cliente.sendMessage(mensajeEntrante.from, mensajeRespuestaSaludoAzar);
-    cliente.sendMessage(numeroEmisor,`Si deseas saber que puedo hacer por ti puedes escribir **opciones** para saberlo`)
+    cliente.sendMessage(numeroEmisor,`Si deseas saber que puedo hacer por ti puedes escribir **opciones** para saberlo.`+
+                                      `\n Si eres profesor sigue las instrucciones de acceso que te dieron`)
     //console.log(mensajeRespuestaSaludoAzar);
   } else if (cuerpoMensaje.search(/nota/) >= 0) {//si en el mensaje existe la palabra nota da instrucciones para recibir notas
     cliente.sendMessage(
@@ -116,7 +117,12 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
                                       '1.- escribe **opciones** para volver a ver este mensaje\n'+
                                       '2.- puedes **pedir notas** simplemente escribiéndolo\n'+
                                       '3.- pideme **cambiar email** para cambiar tu correo para recibir resultados de las pruebas')
-  } else if(cuerpoMensaje.search(/datosEstudiante/)>=0){
+  } else if(cuerpoMensaje.search(/\/profesor/)>=0){
+    cliente.sendMessage(numeroEmisor,`${nombreNotificacion}, para solicitar los datos de algun estudiante `+
+                                     `debes usar el comando, un espacio y el rut del estudiante sin puntos ni guión. `+
+                                     `En caso de terminar en k, reemplácelo por un 1 en esta forma exactamente por ejemplo: /datos 123456781 `+
+                                     `Si es rut extranjero NO incluya e 100`)
+  } else if(cuerpoMensaje.search(/\/datos/)>=0){
       datosEstudiante(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje);
   } else {/**contesta cleverbot */
     clever(cuerpoMensaje)
