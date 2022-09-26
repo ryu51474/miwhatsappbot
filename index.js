@@ -8,7 +8,7 @@ const validadorEmail = require('email-validator')
 const { validate, clean, format, getCheckDigit } = require('rut.js')
 const validaRut = (rut)=>{return validate(rut)}
 //modulos propios externos
-const {cambioEmail,envioNotas} = require('./API_servicios/APIservicios')
+const {cambioEmail,envioNotas,datosEstudiante} = require('./API_servicios/APIservicios')
 
 //seccion express de experimentacion para implementar ya a produccion
 const puerto=process.env.PORT||3000
@@ -116,6 +116,8 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
                                       '1.- escribe **opciones** para volver a ver este mensaje\n'+
                                       '2.- puedes **pedir notas** simplemente escribiéndolo\n'+
                                       '3.- pideme **cambiar email** para cambiar tu correo para recibir resultados de las pruebas')
+  } else if(cuerpoMensaje.search(/datosEstudiante/)>=0){
+      datosEstudiante(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje);
   } else {/**contesta cleverbot */
     clever(cuerpoMensaje)
       .then(async (respuestacleverBot) => {

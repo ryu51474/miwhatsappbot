@@ -2,6 +2,8 @@ const urlApiNotas =
     "https://script.google.com/macros/s/AKfycbyYYD23WAZ2_XBfRBgbeX4R5XqCwbfaPvrYkKQ38Dh7J3oPGKKQqv-3l8m8XxR_OaEKoQ/exec?sdata=";
 const urlApiNuevoEmail =
     "https://script.google.com/macros/s/AKfycbyYYD23WAZ2_XBfRBgbeX4R5XqCwbfaPvrYkKQ38Dh7J3oPGKKQqv-3l8m8XxR_OaEKoQ/exec?sdata=";
+const urlApiDatosEstudiante =
+    "https://script.google.com/macros/s/AKfycbyYYD23WAZ2_XBfRBgbeX4R5XqCwbfaPvrYkKQ38Dh7J3oPGKKQqv-3l8m8XxR_OaEKoQ/exec?sdata=datosEstudiante,";
 
 const {MessageMedia} = require('whatsapp-web.js');
 const fetch = require('isomorphic-fetch');
@@ -100,9 +102,13 @@ function envioNotas(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje){
     });
   //cliente.sendMessage(numeroEmisor,apirespuestafinal.toString());  
 }
+function datosEstudiante(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje){
+    
+ }
 
 
 module.exports={
     cambioEmail,
-    envioNotas
+    envioNotas,
+    datosEstudiante
 }
