@@ -120,9 +120,8 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
   } else if(cuerpoMensaje.search(/\/profesor/)>=0){
     cliente.sendMessage(numeroEmisor,`${nombreNotificacion}, para solicitar los datos de algun estudiante `+
                                      `debes usar el comando, un espacio y el rut del estudiante sin puntos ni guión. `+
-                                     `En caso de terminar en k, reemplácelo por un 1 en esta forma exactamente por ejemplo:`+
-                                     `\n /datos 123456781 `+
-                                     `\nSi es rut extranjero NO incluya el 100`)
+                                     `En caso de terminar en k, reemplácelo por un 1 en esta forma exactamente por ejemplo: /datos 123456781 `+
+                                     `\nSi es rut extranjero NO incluya e 100`)
   } else if(cuerpoMensaje.search(/\/datos/)>=0){
       datosEstudiante(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje);
   } else {/**contesta cleverbot */
