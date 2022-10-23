@@ -57,12 +57,12 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
   //console.log(mensajeEntrante.from);
   //console.log(mensajeEntrante.to);
 
-  var ahora = new Date(); //PROCESO PENDIENTE: se ha subido aqui, sacado del primer if porque solo debe responder el bot si es muy tarde
-
+  
   if (cuerpoMensaje.search(/hola/) >= 0) {//si el mensaje viene con la palabra hola responde un saludo al azar
+    var ahora = new Date(); //PROCESO PENDIENTE: se ha subido aqui, sacado del primer if porque solo debe responder el bot si es muy tarde
     var arrayRespuestas = [
       `estas bien?, un gusto saludarte ${nombreNotificacion}`,
-      `son las ${ahora.getHours()}:${ahora.getMinutes()} en este momento, en serio me escribes a esta hora ${nombreNotificacion}?`,
+      `son las ${ahora.getHours()}:${ahora.getMinutes()<10?'0':''}${ahora.getMinutes()} en este momento, en serio me escribes a esta hora ${nombreNotificacion}?`,
       `palabras, siempre palabras. por que no me dices de una vez que quieres ${nombreNotificacion}?`,
       `${nombreNotificacion}, podrias mejorar lo que me dices`,
       `primero el mensaje de saludos, bien ${nombreNotificacion}`,
@@ -120,9 +120,8 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
   } else if(cuerpoMensaje.search(/\/profesor/)>=0){
     cliente.sendMessage(numeroEmisor,`${nombreNotificacion}, para solicitar los datos de algun estudiante `+
                                      `debes usar el comando, un espacio y el rut del estudiante sin puntos ni guión. `+
-                                     `En caso de terminar en k, reemplácelo por un 1 en esta forma exactamente por ejemplo:`+
-                                     `\n /datos 123456781 `+
-                                     `\nSi es rut extranjero NO incluya el 100`)
+                                     `En caso de terminar en k, reemplácelo por un 1 en esta forma exactamente por ejemplo: /datos 123456781 `+
+                                     `\nSi es rut extranjero NO incluya e 100`)
   } else if(cuerpoMensaje.search(/\/datos/)>=0){
       datosEstudiante(cliente,nombreNotificacion,numeroEmisor,cuerpoMensaje);
   } else {/**contesta cleverbot */
