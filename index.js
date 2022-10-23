@@ -62,7 +62,7 @@ cliente.on("message", (mensajeEntrante) => {//procesos de respuestas segun mensa
     var ahora = new Date(); //PROCESO PENDIENTE: se ha subido aqui, sacado del primer if porque solo debe responder el bot si es muy tarde
     var arrayRespuestas = [
       `estas bien?, un gusto saludarte ${nombreNotificacion}`,
-      `son las ${ahora.getHours()}:${ahora.getMinutes()} en este momento, en serio me escribes a esta hora ${nombreNotificacion}?`,
+      `son las ${ahora.getHours()}:${ahora.getMinutes()<10?'0':''}${ahora.getMinutes()} en este momento, en serio me escribes a esta hora ${nombreNotificacion}?`,
       `palabras, siempre palabras. por que no me dices de una vez que quieres ${nombreNotificacion}?`,
       `${nombreNotificacion}, podrias mejorar lo que me dices`,
       `primero el mensaje de saludos, bien ${nombreNotificacion}`,
